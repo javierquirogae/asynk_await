@@ -1,23 +1,22 @@
-$res = $('#res');
-$res1 = $('#res1');
-$res2 = $('#res2');
+const $res = $('#res');
+const $res1 = $('#res1');
+const $res2 = $('#res2');
 
-$form1 = $('#form1');
-$form2 = $('#form2');
-
+const $form1 = $('#form1');
+const $form2 = $('#form2');
 
 $res.append('<h3>Get cool facts about your favorite numbers !!</h3>');
 
-$form1.submit(function(e) {
+$form1.submit(async function(e) {
     e.preventDefault();
     let num = 0;
     $res1.empty();
     num = $('#number').val();
     console.log(num);
-    getFourFacts(num);
+    await getFourFacts(num);
 });
 
-function getFourFacts(num) {
+async function getFourFacts(num) {
     let fourPromises = [];
     let url = '';
     for (let i = 0; i < 4; i++) {
@@ -25,20 +24,17 @@ function getFourFacts(num) {
         fourPromises.push(axios.get(url));
         console.log(url);
     }
-    Promise.all(fourPromises)
-    .then(facts => {
+    try {
+        const facts = await Promise.all(fourPromises);
         facts.forEach(res => {
             $res1.append(`<h3 style="color:blue;">${res.data.text}</h3>`);
         });
-    })
-    .catch(err => {
+    } catch (err) {
         $res1.append(`<p style="color:red;"><b>${err}</b></p>`);
-    });
+    }
 }
 
-
-
-$form2.submit(function(e) {
+$form2.submit(async function(e) {
     e.preventDefault();
     let choices = [];
     $res2.empty();
@@ -46,13 +42,10 @@ $form2.submit(function(e) {
     choices.push($('#number2').val());
     choices.push($('#number3').val());
     console.log(choices);
-    getThreeFacts(choices);
+    await getThreeFacts(choices);
 });
 
-
-    
-
-function getThreeFacts(nums) {
+async function getThreeFacts(nums) {
     let threePromises = [];
     let url = '';
     for (let i = 0; i < 3; i++) {
@@ -60,16 +53,12 @@ function getThreeFacts(nums) {
         threePromises.push(axios.get(url));
         console.log(url);
     }
-    Promise.all(threePromises)
-    .then(facts => {
+    try {
+        const facts = await Promise.all(threePromises);
         facts.forEach(res => {
             $res2.append(`<h3 style="color:blue;">${res.data.text}</h3>`);
         });
-    })
-    .catch(err => {
+    } catch (err) {
         $res2.append(`<p style="color:red;"><b>${err}</b></p>`);
-    });
+    }
 }
-
-
-
